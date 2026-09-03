@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Sophia</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+        radial-gradient(circle at 50% 45%, #203c82 0%, #0b1740 42%, #020611 100%);
+    color: white;
+}
+
+/* =========================
+   CÉU
+========================= */
+
+.sky {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 9px white;
+    animation: brilho 3s infinite ease-in-out;
+}
+
+.star:nth-child(1) { top: 8%; left: 12%; }
+.star:nth-child(2) { top: 17%; left: 30%; animation-delay: .8s; }
+.star:nth-child(3) { top: 11%; left: 73%; animation-delay: 1.2s; }
+.star:nth-child(4) { top: 28%; left: 88%; animation-delay: .4s; }
+.star:nth-child(5) { top: 37%; left: 15%; animation-delay: 1.8s; }
+.star:nth-child(6) { top: 23%; left: 57%; animation-delay: 2s; }
+.star:nth-child(7) { top: 44%; left: 78%; animation-delay: .7s; }
+.star:nth-child(8) { top: 7%; left: 91%; animation-delay: 1.5s; }
+.star:nth-child(9) { top: 34%; left: 44%; animation-delay: 2.2s; }
+.star:nth-child(10) { top: 54%; left: 9%; animation-delay: 1s; }
+.star:nth-child(11) { top: 18%; left: 83%; animation-delay: .5s; }
+.star:nth-child(12) { top: 47%; left: 63%; animation-delay: 2.5s; }
+.star:nth-child(13) { top: 62%; left: 27%; animation-delay: 1.3s; }
+.star:nth-child(14) { top: 58%; left: 87%; animation-delay: .3s; }
+
+@keyframes brilho {
+    0%,100% {
+        opacity: .25;
+        transform: scale(.7);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+/* Lua */
+
+.moon {
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    top: 9%;
+    right: 12%;
+    border-radius: 50%;
+    background: #fff8d7;
+    box-shadow:
+        0 0 25px #fff4b5,
+        0 0 70px rgba(255,240,170,.3);
+}
+
+.moon::after {
+    content: "";
+    position: absolute;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: #071333;
+    left: -25px;
+    top: -9px;
+}
+
+/* =========================
+   CARTA
+========================= */
+
+.scene {
+    position: relative;
+    z-index: 5;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+}
+
+.letter {
+    width: min(650px, 90vw);
+    min-height: 390px;
+
+    padding: 60px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.98),
+            rgba(246,249,255,.96)
+        );
+
+    color: #17264f;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.5),
+        0 0 35px rgba(150,180,255,.15);
+
+    transform: rotate(-1deg);
+
+    position: relative;
+}
+
+.letter::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(40,70,130,.15);
+    pointer-events: none;
+}
+
+.content {
+    text-align: center;
+}
+
+.intro {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #6b7fae;
+    margin-bottom: 35px;
+}
+
+/* =========================
+   BOTÃO
+========================= */
+
+.open-button {
+    border: none;
+    cursor: pointer;
+
+    padding: 15px 32px;
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(135deg, #dfeaff, #ffffff);
+
+    color: #29457d;
+
+    font-family: Georgia, serif;
+    font-size: 16px;
+
+    box-shadow:
+        0 8px 25px rgba(30,60,120,.2);
+
+    transition:
+        transform .3s,
+        box-shadow .3s;
+}
+
+.open-button:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 12px 30px rgba(30,60,120,.3);
+}
+
+.open-button:active {
+    transform: scale(.96);
+}
+
+/* =========================
+   MENSAGEM
+========================= */
+
+.message {
+    display: none;
+
+    font-size: clamp(23px, 4vw, 36px);
+    line-height: 1.5;
+
+    animation: aparecer 1.5s ease forwards;
+}
+
+.message.show {
+    display: block;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.signature {
+    margin-top: 35px;
+
+    font-size: 14px;
+    letter-spacing: 3px;
+
+    color: #7887a5;
+}
+
+/* =========================
+   BUQUÊ DE ROSAS
+========================= */
+
+.bouquet {
+    position: fixed;
+    z-index: 8;
+
+    bottom: 2%;
+    right: 4%;
+
+    width: 230px;
+    height: 300px;
+
+    animation: bouquetFloat 5s ease-in-out infinite;
+}
+
+@keyframes bouquetFloat {
+    0%,100% {
+        transform: translateY(0) rotate(2deg);
+    }
+
+    50% {
+        transform: translateY(-8px) rotate(-2deg);
+    }
+}
+
+/* Folhas */
+
+.leaf {
+    position: absolute;
+
+    width: 80px;
+    height: 30px;
+
+    background:
+        linear-gradient(135deg, #183f35, #2c6a52);
+
+    border-radius: 100% 0 100% 0;
+
+    transform: rotate(-25deg);
+
+    filter: drop-shadow(0 5px 4px rgba(0,0,0,.3));
+}
+
+.leaf.l1 {
+    left: 55px;
+    bottom: 70px;
+}
+
+.leaf.l2 {
+    left: 100px;
+    bottom: 90px;
+    transform: rotate(30deg) scale(.8);
+}
+
+.leaf.l3 {
+    left: 25px;
+    bottom: 110px;
+    transform: rotate(-55deg) scale(.75);
+}
+
+/* Caules */
+
+.stem {
+    position: absolute;
+
+    width: 5px;
+    height: 170px;
+
+    background: #285541;
+
+    bottom: 25px;
+    left: 110px;
+
+    transform: rotate(-5deg);
+
+    border-radius: 10px;
+}
+
+.stem.s2 {
+    height: 150px;
+    left: 80px;
+    transform: rotate(-18deg);
+}
+
+.stem.s3 {
+    height: 145px;
+    left: 140px;
+    transform: rotate(14deg);
+}
+
+/* Rosa */
+
+.white-rose {
+    position: absolute;
+
+    width: 82px;
+    height: 82px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #ffffff 0 18%,
+            #edf2f8 19% 31%,
+            #ffffff 32% 45%,
+            #dce5ee 46% 60%,
+            #ffffff 61% 75%,
+            #d7e0eb 76%
+        );
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.25),
+        0 0 20px rgba(255,255,255,.3);
+
+    animation: roseBreath 4s ease-in-out infinite;
+}
+
+.white-rose::before,
+.white-rose::after {
+    content: "";
+    position: absolute;
+
+    width: 72px;
+    height: 72px;
+
+    border-radius: 50%;
+
+    border: 7px solid rgba(255,255,255,.75);
+
+    inset: 5px;
+}
+
+.white-rose::after {
+    transform: rotate(45deg);
+}
+
+@keyframes roseBreath {
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+.r1 {
+    left: 68px;
+    top: 30px;
+}
+
+.r2 {
+    left: 15px;
+    top: 72px;
+    transform: scale(.85);
+    animation-delay: .5s;
+}
+
+.r3 {
+    left: 125px;
+    top: 72px;
+    transform: scale(.85);
+    animation-delay: 1s;
+}
+
+.r4 {
+    left: 55px;
+    top: 105px;
+    transform: scale(.72);
+    animation-delay: 1.5s;
+}
+
+.r5 {
+    left: 105px;
+    top: 112px;
+    transform: scale(.72);
+    animation-delay: 2s;
+}
+
+/* Laço */
+
+.ribbon {
+    position: absolute;
+
+    bottom: 18px;
+    left: 83px;
+
+    width: 75px;
+    height: 50px;
+
+    background: #8fa9d8;
+
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        82% 100%,
+        50% 70%,
+        18% 100%
+    );
+
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,.25));
+}
+
+.ribbon::before,
+.ribbon::after {
+    content: "";
+
+    position: absolute;
+
+    width: 42px;
+    height: 35px;
+
+    background: #a9bee2;
+
+    top: -18px;
+
+    border-radius: 50% 50% 0 50%;
+}
+
+.ribbon::before {
+    left: -24px;
+    transform: rotate(-25deg);
+}
+
+.ribbon::after {
+    right: -24px;
+    transform: scaleX(-1) rotate(-25deg);
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
+.hint {
+    position: fixed;
+    z-index: 10;
+
+    bottom: 18px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 10px;
+    letter-spacing: 3px;
+
+    color: rgba(255,255,255,.45);
+}
+
+/* =========================
+   CELULAR
+========================= */
+
+@media(max-width:700px) {
+
+    .letter {
+        padding: 50px 28px;
+        min-height: 340px;
+    }
+
+    .message {
+        font-size: 24px;
+    }
+
+    .bouquet {
+        transform: scale(.65);
+        transform-origin: bottom right;
+
+        right: -15px;
+        bottom: -10px;
+    }
+
+    .moon {
+        width: 65px;
+        height: 65px;
+        right: 8%;
+    }
+
+    .moon::after {
+        width: 65px;
+        height: 65px;
+    }
+
+    .intro {
+        font-size: 9px;
+        letter-spacing: 2px;
+    }
+
+    .open-button {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- CÉU -->
+
+<div class="sky">
+
+    <div class="moon"></div>
+
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+
+</div>
+
+
+<!-- CARTA -->
+
+<main class="scene">
+
+    <div class="letter">
+
+        <div class="content">
+
+            <div class="intro">
+                para você
+            </div>
+
+            <!-- BOTÃO -->
+
+            <button
+                class="open-button"
+                id="openButton"
+                onclick="abrirCarta()">
+
+                abrir carta
+
+            </button>
+
+
+            <!-- MENSAGEM -->
+
+            <div
+                class="message"
+                id="message">
+
+                “Algumas pessoas simplesmente
+                chegam e fazem o mundo ficar
+                mais bonito. Você é uma delas.”
+
+                <div class="signature">
+                    feito com carinho
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- BUQUÊ -->
+
+<div class="bouquet">
+
+    <div class="stem"></div>
+    <div class="stem s2"></div>
+    <div class="stem s3"></div>
+
+    <div class="leaf l1"></div>
+    <div class="leaf l2"></div>
+    <div class="leaf l3"></div>
+
+    <div class="white-rose r1"></div>
+    <div class="white-rose r2"></div>
+    <div class="white-rose r3"></div>
+    <div class="white-rose r4"></div>
+    <div class="white-rose r5"></div>
+
+    <div class="ribbon"></div>
+
+</div>
+
+
+<div class="hint">
+    uma pequena surpresa
+</div>
+
+
+<script>
+
+function abrirCarta() {
+
+    const button = document.getElementById("openButton");
+    const message = document.getElementById("message");
+
+    button.style.display = "none";
+
+    message.classList.add("show");
+
+}
+
+</script>
+
+</body>
+</html>
